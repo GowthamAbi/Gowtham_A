@@ -9,29 +9,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.CLIENT_URL
-].filter(Boolean);
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow Postman/server-to-server requests
-      if (!origin) {
-        return callback(null, true);
-      }
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      console.log("Blocked CORS origin:", origin);
-
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -40,7 +22,7 @@ app.use(express.json());
 app.get("/api/health", (_req, res) => {
   res.json({
     success: true,
-    message: "Portfolio API is running"
+    message: "Portfolio API is running",
   });
 });
 
@@ -56,6 +38,10 @@ mongoose
     });
   })
   .catch((error) => {
-    console.error("MongoDB connection error:", error.message);
+    console.error(
+      "MongoDB connection error:",
+      error.message
+    );
+
     process.exit(1);
   });

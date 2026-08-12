@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Save to MongoDB
+    // Save contact to MongoDB
     const contact = await Contact.create({
       name,
       email,
@@ -35,9 +35,6 @@ router.post("/", async (req, res) => {
     await transporter.sendMail({
       from: `"Portfolio Contact" <${process.env.MAIL_USER}>`,
       to: process.env.MAIL_TO,
-
-      // When you click Reply in Gmail,
-      // it will reply directly to the person who contacted you.
       replyTo: email,
 
       subject: `New Portfolio Message from ${name}`,
@@ -56,7 +53,11 @@ Portfolio Contact Form
       `,
 
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 650px; margin: auto;">
+        <div style="
+          font-family: Arial, sans-serif;
+          max-width: 650px;
+          margin: 0 auto;
+        ">
 
           <div style="
             background: #172238;
@@ -68,7 +69,10 @@ Portfolio Contact Form
               New Portfolio Message
             </h2>
 
-            <p style="margin-bottom: 0; color: #bae6fd;">
+            <p style="
+              margin-bottom: 0;
+              color: #bae6fd;
+            ">
               Someone contacted you through your portfolio.
             </p>
           </div>
@@ -82,12 +86,12 @@ Portfolio Contact Form
 
             <p>
               <strong>Name:</strong><br>
-              ${name}
+              ${escapeHtml(name)}
             </p>
 
             <p>
               <strong>Email:</strong><br>
-              ${email}
+              ${escapeHtml(email)}
             </p>
 
             <p>
@@ -100,7 +104,7 @@ Portfolio Contact Form
               border-radius: 10px;
               line-height: 1.6;
             ">
-              ${message.replace(/\n/g, "<br>")}
+              ${escapeHtml(message).replace(/\n/g, "<br>")}
             </div>
 
             <p style="
@@ -112,25 +116,33 @@ Portfolio Contact Form
             </p>
 
           </div>
-
         </div>
       `,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Message sent successfully",
-      contact,
+      contactId: contact._id,
     });
 
   } catch (error) {
     console.error("Contact error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to send message",
     });
   }
 });
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 export default router;
