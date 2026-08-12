@@ -476,18 +476,36 @@ function Education() {
 }
 
 function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
   const [status, setStatus] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
+
     setStatus("loading");
 
     try {
-      await axios.post(`${API}/contact`, form);
-      setForm({ name: "", email: "", message: "" });
+      await axios.post(`${API}/contact`, {
+        name: form.name,
+        email: form.email,
+        message: form.message,
+      });
+
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+
       setStatus("success");
-    } catch {
+    } catch (error) {
+      console.error("Contact form error:", error);
+
       setStatus("error");
     }
   };
@@ -497,73 +515,173 @@ function Contact() {
       <div className="shell">
         <div className="overflow-hidden rounded-[34px] border border-white bg-white shadow-soft">
           <div className="grid lg:grid-cols-[.78fr_1.22fr]">
+
+            {/* LEFT */}
             <div className="relative overflow-hidden bg-[#172238] p-8 text-white sm:p-10">
+
               <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-sky-400/20 blur-3xl" />
-              <Sparkles className="relative text-sky-300" size={24} />
+
+              <Sparkles
+                className="relative text-sky-300"
+                size={24}
+              />
+
               <p className="relative mt-9 text-[10px] font-extrabold uppercase tracking-[.25em] text-sky-300">
                 Contact
               </p>
+
               <h2 className="relative mt-2 text-4xl font-extrabold tracking-tight">
-                Get in <span className="text-sky-300">Touch</span>
+                Get in{" "}
+                <span className="text-sky-300">
+                  Touch
+                </span>
               </h2>
+
               <p className="relative mt-5 max-w-sm text-sm leading-7 text-slate-300">
-                Have a website, SaaS product or AI idea? Send a message and let's discuss it.
+                Have a website, SaaS product or AI idea?
+                Send a message and let's discuss it.
               </p>
 
               <div className="relative mt-9 space-y-4">
-                <a href={`mailto:${profile.email}`} className="flex items-center gap-3 text-xs font-bold hover:text-sky-300">
-                  <Mail size={16} /> {profile.email}
+
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="flex items-center gap-3 text-xs font-bold hover:text-sky-300"
+                >
+                  <Mail size={16} />
+                  {profile.email}
                 </a>
+
                 <div className="flex items-center gap-3 text-xs font-bold">
-                  <CheckCircle2 size={16} className="text-emerald-300" />
+                  <CheckCircle2
+                    size={16}
+                    className="text-emerald-300"
+                  />
+
                   Available for freelance work
                 </div>
+
               </div>
             </div>
 
-            <form onSubmit={submit} className="p-8 sm:p-10">
+            {/* RIGHT */}
+            <form
+              onSubmit={submit}
+              className="p-8 sm:p-10"
+            >
+
               <div className="grid gap-5 sm:grid-cols-2">
-                <Input label="Name" placeholder="Your name" value={form.name} onChange={v => setForm({...form, name: v})} />
-                <Input label="Email" type="email" placeholder="you@example.com" value={form.email} onChange={v => setForm({...form, email: v})} />
+
+                <Input
+                  label="Name"
+                  name="name"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      name: e.target.value,
+                    })
+                  }
+                />
+
+                <Input
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      email: e.target.value,
+                    })
+                  }
+                />
+
               </div>
 
+              {/* MESSAGE */}
+
               <label className="mt-5 block">
+
                 <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-slate-500">
                   Message
                 </span>
+
                 <textarea
                   required
+                  name="message"
                   rows="7"
                   value={form.message}
-                  onChange={e => setForm({...form, message: e.target.value})}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      message: e.target.value,
+                    })
+                  }
                   placeholder="Tell me about your project..."
                   className="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm outline-none focus:border-sky-400 focus:bg-white"
                 />
+
               </label>
+
+              {/* SUCCESS */}
 
               {status === "success" && (
                 <p className="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-600">
-                  <CheckCircle2 size={15} /> Message sent successfully.
-                </p>
-              )}
-              {status === "error" && (
-                <p className="mt-4 text-xs font-bold text-red-500">
-                  Could not send message. Please start the Node.js backend.
+                  <CheckCircle2 size={15} />
+                  Message sent successfully.
                 </p>
               )}
 
+              {/* ERROR */}
+
+              {status === "error" && (
+                <p className="mt-4 text-xs font-bold text-red-500">
+                  Could not send message. Please check the backend.
+                </p>
+              )}
+
+              {/* BUTTON */}
+
               <button
+                type="submit"
                 disabled={status === "loading"}
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#172238] px-6 py-3 text-sm font-bold text-white hover:bg-sky-600 disabled:opacity-50"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#172238] px-6 py-3 text-sm font-bold text-white hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {status === "loading" ? "Sending..." : "Send Message"}
+                {status === "loading"
+                  ? "Sending..."
+                  : "Send Message"}
+
                 <ArrowRight size={16} />
               </button>
+
             </form>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+
+function Input({
+  label,
+  ...props
+}) {
+  return (
+    <label>
+      <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-slate-500">
+        {label}
+      </span>
+
+      <input
+        required
+        {...props}
+        className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white"
+      />
+    </label>
   );
 }
 
