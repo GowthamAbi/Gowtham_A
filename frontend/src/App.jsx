@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { profile, skills, projects, experience } from "./data/portfolio";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API = "https://gowtham-a.onrender.com" || "http://localhost:5000/api";
 
 function Navbar() {
   const [mobile, setMobile] = useState(false);
@@ -31,7 +31,7 @@ function Navbar() {
     ["Projects", "#projects"],
     ["Experience", "#experience"],
     ["Education", "#education"],
-    ["Contact", "#contact"]
+  
   ];
 
   return (
@@ -42,7 +42,7 @@ function Navbar() {
             <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#172238] text-white">
               <span className="text-sm">✦</span>
             </span>
-            <span className="font-extrabold tracking-tight">CoreX</span>
+            <span className="font-extrabold tracking-tight">UG</span>
           </a>
 
           <div className="hidden items-center gap-7 md:flex">
