@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color: #182238;
+  background: #f5fbff;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(120, 210, 250, .15), transparent 28%),
+    radial-gradient(circle at 90% 40%, rgba(120, 190, 255, .12), transparent 28%),
+    #f6fcff;
+}
+
+::selection {
+  background: #bceaff;
+  color: #152139;
+}
+
+@layer components {
+  .shell { @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10; }
+  .eyebrow { @apply text-[10px] font-extrabold uppercase tracking-[.25em] text-sky-600; }
+  .panel { @apply rounded-[30px] border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl; }
+}
