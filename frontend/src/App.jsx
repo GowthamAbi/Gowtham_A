@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { profile, skills, projects, experience } from "./data/portfolio";
 
-const API = "https://gowtham-a.onrender.com" || "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 function Navbar() {
   const [mobile, setMobile] = useState(false);
