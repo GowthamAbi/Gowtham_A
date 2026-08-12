@@ -42,7 +42,7 @@ function Navbar() {
             <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#172238] text-white">
               <span className="text-sm">✦</span>
             </span>
-            <span className="font-extrabold tracking-tight">UG</span>
+            <span className="font-extrabold tracking-tight">UG-Ai Creators</span>
           </a>
 
           <div className="hidden items-center gap-7 md:flex">
