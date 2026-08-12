@@ -685,20 +685,7 @@ function Input({
   );
 }
 
-function Input({ label, ...props }) {
-  return (
-    <label>
-      <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-slate-500">
-        {label}
-      </span>
-      <input
-        required
-        {...props}
-        className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-sm outline-none focus:border-sky-400 focus:bg-white"
-      />
-    </label>
-  );
-}
+
 
 function Footer() {
   return (
