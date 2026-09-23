@@ -1,23 +1,31 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import contactRoutes from "./routes/contactRoutes.js";
-
-dotenv.config();
+import contentRoutes from "./routes/contentRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import visitorRoutes from "./routes/visitorRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = ["http://localhost:5173", "http://127.0.0.1:5173", ...(process.env.CLIENT_URL || "").split(",")]
+  .map((value) => value.trim().replace(/\/$/, ""))
+  .filter(Boolean);
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST", "OPTIONS"],
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ""))) return callback(null, true);
+      return callback(new Error(`CORS not allowed for origin: ${origin}`));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 app.get("/api/health", (_req, res) => {
   res.json({
@@ -27,6 +35,9 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/contact", contactRoutes);
+app.use("/api/content", contentRoutes);
+app.use("/api/visitors", visitorRoutes);
+app.use("/api/admin", adminRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URI)

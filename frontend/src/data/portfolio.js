@@ -20,10 +20,23 @@ export const skills = [
   { title: "Generative AI", icon: "✺", text: "LLMs, prompt engineering and AI apps" },
   { title: "RAG", icon: "✦", text: "Context-aware retrieval workflows" },
   { title: "Machine Learning", icon: "◎", text: "Scikit-learn and data preprocessing" },
-  { title: "AWS", icon: "☁", text: "AWS cloud fundamentals" }
+  { title: "AWS", icon: "☁", text: "AWS cloud fundamentals" },
+  { title: "SaaS Architecture", icon: "◆", text: "Multi-tenant systems, role access and subscriptions" },
+  { title: "REST API Security", icon: "⌁", text: "JWT, CORS, validation and protected workflows" }
 ];
 
 export const projects = [
+  {
+    title: "UG SaaS — Garment Production Platform",
+    category: "Featured SaaS",
+    description:
+      "Multi-tenant garment operations platform covering fabric inward, QR traceability, cutting and folding plans, machine timelines, stock, delivery challans, approvals, subscriptions and department dashboards.",
+    tags: ["React", "Node.js", "Express", "MongoDB", "SaaS", "RBAC", "QR"],
+    style: "dark",
+    featured: true,
+    liveUrl: "https://garmentsaas.netlify.app",
+    repoUrl: ""
+  },
   {
     title: "Smart Lecture Assistant",
     category: "Generative AI",

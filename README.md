@@ -1,73 +1,71 @@
-# CoreX Portfolio — React + Tailwind + Node.js + MongoDB
+# Gowtham A — Editable Portfolio
 
-Portfolio design inspired by the uploaded CoreX-style reference image.
+A standalone React portfolio with an Express/MongoDB API and a private owner studio.
 
-## Sections
-1. Hero
-2. Skills
-3. Projects
-4. Internship / Experience
-5. About / Profile
-6. Contact
-7. Footer
+## Included
 
-## Run
+- Public portfolio for visitors
+- UG SaaS garment-production project showcase
+- Editable profile, skills, projects, experience and education
+- Private owner route at `/owner`
+- Contact form with MongoDB storage and email notification
+- Anonymous visitor-session log and first-visit email notification
+- Responsive design for desktop and mobile
 
-### Backend
+## Local setup
+
+### API
+
 ```bash
 cd backend
 npm install
-copy .env.example .env
+cp .env.example .env
 npm run dev
 ```
 
-### Frontend
+### Website
+
 ```bash
 cd frontend
 npm install
-copy .env.example .env
+cp .env.example .env
 npm run dev
 ```
 
-Frontend: http://localhost:5173
-Backend: http://localhost:5000
+Public site: `http://localhost:5173`
 
-## MongoDB
+Owner studio: `http://localhost:5173/owner`
 
-Local:
+API: `http://localhost:5000/api`
+
+## Required backend environment variables
+
 ```env
-MONGODB_URI=mongodb://127.0.0.1:27017/corex_portfolio
+PORT=5000
+MONGODB_URI=mongodb+srv://...
+CLIENT_URL=https://your-portfolio.netlify.app
+MAIL_USER=your-gmail@gmail.com
+MAIL_PASS=your-google-app-password
+MAIL_TO=your-notification-email@gmail.com
+ADMIN_EMAIL=owner@example.com
+ADMIN_PASSWORD=use-a-long-unique-password
+JWT_SECRET=use-a-long-random-secret
 ```
 
-MongoDB Atlas can also be used.
+`CLIENT_URL` accepts comma-separated origins. Use a Google App Password for `MAIL_PASS`, not the normal Gmail password.
 
-## Customize
+## Frontend environment variable
 
-Edit:
-`frontend/src/data/portfolio.js`
+```env
+VITE_API_URL=https://your-api.onrender.com/api
+```
 
-Replace:
-- profile name
-- profile photo
-- skills
-- projects
-- internship / experience
-- social links
-- email
+## Deployment
 
-Contact messages are stored in MongoDB through:
-`POST /api/contact`
+1. Deploy `backend` to Render (or another Node host) and configure the backend variables.
+2. Deploy the repository to Netlify. `frontend/netlify.toml` contains the build and SPA redirect settings.
+3. Add `VITE_API_URL` in Netlify and redeploy.
+4. Add the final Netlify URL to backend `CLIENT_URL` and restart the API.
+5. Open `/owner`, sign in with `ADMIN_EMAIL` and `ADMIN_PASSWORD`, then click **Save & Publish** after edits.
 
-
-## Personal data added
-
-This version uses the uploaded professional photo and the information from the uploaded resume:
-- Generative AI Engineer | Full Stack Developer
-- IBM SkillsBuild AI Internship (6 months)
-- Smart Lecture Assistant
-- Financial Management System
-- B.E. Electronics & Communication Engineering (2020)
-- Python, React.js, Node.js, Express.js, MongoDB, ML, LLMs, RAG and AWS fundamentals
-
-The photo is stored at:
-`frontend/public/profile.png`
+The public route never shows the owner controls. Visitor records store a one-way hash of the IP address rather than the raw IP.

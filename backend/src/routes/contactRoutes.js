@@ -4,23 +4,26 @@ import nodemailer from "nodemailer";
 
 const router = express.Router();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-  },
-});
+const emailConfigured = Boolean(process.env.MAIL_USER && process.env.MAIL_PASS && process.env.MAIL_TO);
+const transporter = emailConfigured
+  ? nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    })
+  : null;
 
 // Check email configuration when server starts
-transporter.verify((error) => {
-  if (error) {
-    console.error("❌ Email configuration error:");
-    console.error(error);
-  } else {
-    console.log("✅ Email server is ready");
-  }
-});
+if (transporter) {
+  transporter.verify((error) => {
+    if (error) console.error("❌ Email configuration error:", error.message);
+    else console.log("✅ Email server is ready");
+  });
+} else {
+  console.warn("⚠️ Email notifications disabled: set MAIL_USER, MAIL_PASS and MAIL_TO in backend/.env");
+}
 
 router.post("/", async (req, res) => {
   try {
@@ -71,6 +74,7 @@ router.post("/", async (req, res) => {
     // -----------------------------
 
     try {
+      if (!transporter) throw new Error("Email credentials are not configured");
       await transporter.sendMail({
         from: `"Portfolio Contact" <${process.env.MAIL_USER}>`,
         to: process.env.MAIL_TO,
